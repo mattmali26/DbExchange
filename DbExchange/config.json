@@ -1,0 +1,38 @@
+﻿{
+  "Steps": [
+    {
+      "FromDataImage": "2021-01-12T00:42:00.46",
+      "DataImageUpdateColumn": "ChangedAt",
+      "StepName": "Align item",
+      "Fetch": {
+        "ConnectionName": "Connection1",
+        "Query": [
+          "SELECT * FROM [dbo].[Items] WHERE ChangedAt >= @FromDataImage"
+        ]
+      },
+      "Check": {
+        "ConnectionName": "Connection2",
+        "Query": [
+          "SELECT count(*) FROM [dbo].[Items] WHERE Id = @Id"
+        ]
+      },
+      "Update": [
+        {
+          "ConnectionName": "Connection2",
+          "Query": [
+            "UPDATE [dbo].[Items] SET Description = @Description WHERE Id = @Id"
+          ]
+        }
+      ],
+      "Create": [
+        {
+          "ConnectionName": "Connection2",
+          "Query": [
+            "INSERT INTO [dbo].[Items](Id, Description) VALUES(@Id, @Description)"
+          ]
+        }
+      ]
+    }
+  ],
+  "FetchDataDeltaSeconds": -180.0
+}
